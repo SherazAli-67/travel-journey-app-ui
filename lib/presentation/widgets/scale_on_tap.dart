@@ -4,6 +4,7 @@ import 'package:travel_journey_app/constants/motion_constant.dart';
 class ScaleOnTap extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
+  final VoidCallback? onDoubleTap;
   final double pressedScale;
   final Duration duration;
 
@@ -11,6 +12,7 @@ class ScaleOnTap extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
+    this.onDoubleTap,
     this.pressedScale = MotionConstant.tapScale,
     this.duration = MotionConstant.fast,
   });
@@ -56,6 +58,7 @@ class _ScaleOnTapState extends State<ScaleOnTap>
       onTapUp: (_) => _setPressed(false),
       onTapCancel: () => _setPressed(false),
       onTap: widget.onTap,
+      onDoubleTap: widget.onDoubleTap,
       child: ScaleTransition(
         scale: _scale,
         child: widget.child,

@@ -17,4 +17,8 @@ class MotionConstant {
   static const double carouselNeighborOpacity = 0.75;
   static const double carouselParallaxFactor = 32.0;
   static const double carouselImageOverflowScale = 1.18;
+
+  static const Duration favoriteBounce = Duration(milliseconds: 420);
+  static const Duration doubleTapBurst = Duration(milliseconds: 700);
+  static const double doubleTapHeartSize = 88.0;
 }
