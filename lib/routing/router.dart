@@ -8,7 +8,7 @@ import 'package:travel_journey_app/presentation/screens/welcome_screen.dart';
 import 'package:travel_journey_app/presentation/screens/wishlist_screen.dart';
 
 GoRouter router = GoRouter(
-  initialLocation: NamedRoutes.welcome.routeName,
+  initialLocation: NamedRoutes.home.routeName,
   routes: [
     GoRoute(path: NamedRoutes.welcome.routeName, builder: (ctx, state) => const WelcomeScreen()),
     StatefulShellRoute.indexedStack(

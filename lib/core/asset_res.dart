@@ -14,7 +14,7 @@ class AssetRes {
   static const placeGrandPalace = '${_imagesPath}place_grand_palace.jpg';
   static const placeWaterfall = '${_imagesPath}place_waterfall.png';
   static const placeDetailHero = '${_imagesPath}place_detail_hero.jpg';
-  static const avatar = '${_imagesPath}avatar.png';
+  static const avatar = '${_imagesPath}profile_avatar.jpeg';
 
   static const logo = '${_iconsPath}logo.png';
   static const icArrowBack = '${_iconsPath}ic_arrow_back.svg';

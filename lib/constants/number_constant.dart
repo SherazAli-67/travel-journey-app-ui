@@ -4,6 +4,8 @@ class NumberConstant {
   static const chipGap = 8.0;
   static const cardRadius = 24.0;
   static const promoRadius = 24.0;
+  static const bottomNavRadius = 99.0;
+  static const bottomNavPaddingV= 8.0;
   static const pillRadius = 128.0;
   static const infoTileRadius = 16.0;
   static const searchBarHeight = 52.0;

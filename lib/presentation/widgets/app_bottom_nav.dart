@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
@@ -31,32 +33,50 @@ class AppBottomNav extends StatelessWidget {
         color: AppColors.black05,
         borderRadius: .circular(NumberConstant.pillRadius),
       ),
-      padding: .symmetric(horizontal: NumberConstant.bottomNavBarPaddingH),
-      child: Row(
-        mainAxisAlignment: .spaceBetween,
-        children: List.generate(_items.length, (index) {
-          final isMic = index == micIndex;
-          final isSelected = selectedIndex == index;
-          final iconColor = isMic
-              ? AppColors.onPrimary
-              : isSelected
-                  ? AppColors.primary
-                  : AppColors.white;
-          return GestureDetector(
-            onTap: () => onSelected(index),
-            child: Container(
-              decoration: BoxDecoration(
-                color: isMic ? AppColors.primary : Colors.transparent,
-                borderRadius: .circular(NumberConstant.pillRadius),
-              ),
-              padding: .symmetric(
-                horizontal: NumberConstant.bottomNavItemPaddingH,
-                vertical: isMic ? NumberConstant.circleButtonPadding : NumberConstant.bottomNavItemPaddingV,
-              ),
-              child: SvgPicture.asset(_items[index], colorFilter: .mode(iconColor, .srcIn),),
+      // padding: .symmetric(horizontal: NumberConstant.bottomNavBarPaddingH),
+      child: ClipRRect(
+
+        borderRadius: .circular(NumberConstant.bottomNavRadius),
+        child: BackdropFilter(
+
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.glassWhite5,
+              borderRadius: .circular(NumberConstant.promoRadius),
             ),
-          );
-        }),
+            padding: .symmetric(
+              horizontal: NumberConstant.promoPaddingH,
+              vertical: NumberConstant.bottomNavPaddingV,
+            ),
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              children: List.generate(_items.length, (index) {
+                final isMic = index == micIndex;
+                final isSelected = selectedIndex == index;
+                final iconColor = isMic
+                    ? AppColors.onPrimary
+                    : isSelected
+                        ? AppColors.primary
+                        : AppColors.white;
+                return GestureDetector(
+                  onTap: () => onSelected(index),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isMic ? AppColors.primary : Colors.transparent,
+                      borderRadius: .circular(NumberConstant.pillRadius),
+                    ),
+                    padding: .symmetric(
+                      horizontal: NumberConstant.bottomNavItemPaddingH,
+                      vertical: isMic ? NumberConstant.circleButtonPadding : NumberConstant.bottomNavItemPaddingV,
+                    ),
+                    child: SvgPicture.asset(_items[index], colorFilter: .mode(iconColor, .srcIn),),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
       ),
     );
   }
