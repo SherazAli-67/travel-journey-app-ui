@@ -27,6 +27,7 @@ class NumberConstant {
   static const bottomNavItemPaddingV = 8.0;
   static const bottomNavBarPaddingH = 16.0;
   static const placeCardAspectRatio = 0.85;
+  static const searchCardAspectRatio = 0.95;
   static const heroBottomRadius = 34.0;
   static const carouselViewportFraction = 0.83;
   static const detailHeroHeightFraction = 0.52;

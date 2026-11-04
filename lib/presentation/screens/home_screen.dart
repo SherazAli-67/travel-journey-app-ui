@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
 import 'package:travel_journey_app/constants/string_const.dart';
@@ -11,6 +12,7 @@ import 'package:travel_journey_app/presentation/widgets/category_chip_row.dart';
 import 'package:travel_journey_app/presentation/widgets/circle_icon_button.dart';
 import 'package:travel_journey_app/presentation/widgets/place_promo_card.dart';
 import 'package:travel_journey_app/presentation/widgets/search_bar_row.dart';
+import 'package:travel_journey_app/routing/router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -49,7 +51,7 @@ class _HomeView extends StatelessWidget {
               children: [
                 _buildHeader(),
                 Text(StringConst.homeTitle, style: AppTextStyles.homeTitle,),
-                const SearchBarRow(),
+                SearchBarRow(onTap: () => context.push(NamedRoutes.search.routeName),),
                 Consumer<HomeProvider>(
                   builder: (context, provider, _) => CategoryChipRow(
                     categories: AppData.categories,
