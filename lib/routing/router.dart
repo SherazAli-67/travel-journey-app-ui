@@ -3,6 +3,7 @@ import 'package:travel_journey_app/presentation/screens/calendar_screen.dart';
 import 'package:travel_journey_app/presentation/screens/home_screen.dart';
 import 'package:travel_journey_app/presentation/screens/mic_screen.dart';
 import 'package:travel_journey_app/presentation/screens/navigation_shell.dart';
+import 'package:travel_journey_app/presentation/screens/place_detail_screen.dart';
 import 'package:travel_journey_app/presentation/screens/search_screen.dart';
 import 'package:travel_journey_app/presentation/screens/settings_screen.dart';
 import 'package:travel_journey_app/presentation/screens/welcome_screen.dart';
@@ -43,6 +44,10 @@ GoRouter router = GoRouter(
       ],
     ),
     GoRoute(path: NamedRoutes.search.routeName, builder: (ctx, state) => const SearchScreen()),
+    GoRoute(
+      path: NamedRoutes.place.routeName,
+      builder: (ctx, state) => PlaceDetailScreen(placeId: state.pathParameters['id']!),
+    ),
   ],
 );
 
@@ -53,8 +58,11 @@ enum NamedRoutes {
   mic('/mic'),
   wishlist('/wishlist'),
   settings('/settings'),
-  search('/search');
+  search('/search'),
+  place('/place/:id');
 
   final String routeName;
   const NamedRoutes(this.routeName);
+
+  static String placePath(String id) => '/place/$id';
 }

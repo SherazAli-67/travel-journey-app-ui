@@ -11,6 +11,7 @@ import 'package:travel_journey_app/presentation/providers/search_provider.dart';
 import 'package:travel_journey_app/presentation/widgets/circle_icon_button.dart';
 import 'package:travel_journey_app/presentation/widgets/place_promo_card.dart';
 import 'package:travel_journey_app/presentation/widgets/search_bar_row.dart';
+import 'package:travel_journey_app/routing/router.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -69,6 +70,7 @@ class _SearchView extends StatelessWidget {
                               aspectRatio: NumberConstant.searchCardAspectRatio,
                               isFavorite: provider.isFavorite(place.id),
                               onFavoriteTap: () => provider.toggleFavorite(place.id),
+                              onTap: () => context.push(NamedRoutes.placePath(place.id)),
                             ),
                           ),
                         );

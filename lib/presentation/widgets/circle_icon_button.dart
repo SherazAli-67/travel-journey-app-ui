@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
@@ -31,10 +33,10 @@ class CircleIconButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: backgroundColor,
           shape: .circle,
           border: borderColor == null ? null : .all(color: borderColor!, width: 1.5),
         ),
+        alignment: .topCenter,
         padding: .all(padding),
         child: Stack(
           clipBehavior: .none,
@@ -44,14 +46,20 @@ class CircleIconButton extends StatelessWidget {
               Positioned(
                 right: 0,
                 top: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: badgeColor,
-                    shape: .circle,
-                    border: .all(color: AppColors.white),
-                  ),
-                  padding: .all(2.5),
-                ),
+                child: ClipRRect(
+                  borderRadius: .circular(NumberConstant.promoRadius),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.glassWhite5,
+                        borderRadius: .circular(NumberConstant.promoRadius),
+                      ),
+                      padding: .symmetric(
+                        horizontal: NumberConstant.promoPaddingH,
+                        vertical: NumberConstant.promoPaddingV,
+                      ),)))
+
               ),
           ],
         ),

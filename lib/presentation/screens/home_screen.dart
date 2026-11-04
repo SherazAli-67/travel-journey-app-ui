@@ -126,6 +126,7 @@ class _HomeView extends StatelessWidget {
             place: place,
             isFavorite: provider.isFavorite(place.id),
             onFavoriteTap: () => provider.toggleFavorite(place.id),
+            onTap: () => context.push(NamedRoutes.placePath(place.id)),
           ),
         );
       },
