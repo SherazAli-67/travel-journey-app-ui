@@ -1,0 +1,21 @@
+class NumberConstant {
+  static const horizontalPadding = 24.0;
+  static const sectionSpacing = 20.0;
+  static const chipGap = 8.0;
+  static const cardRadius = 24.0;
+  static const promoRadius = 24.0;
+  static const pillRadius = 128.0;
+  static const infoTileRadius = 16.0;
+  static const searchBarHeight = 52.0;
+  static const chipHeight = 46.0;
+  static const circleButtonPadding = 12.0;
+  static const promoPaddingH = 14.0;
+  static const promoPaddingV = 16.0;
+  static const bottomNavHeight = 72.0;
+  static const bottomNavHorizontalInset = 48.0;
+  static const bottomNavBottomInset = 30.0;
+  static const heroBottomRadius = 34.0;
+  static const carouselViewportFraction = 0.83;
+  static const detailHeroHeightFraction = 0.52;
+  static const welcomeCtaBottomFraction = 0.12;
+}

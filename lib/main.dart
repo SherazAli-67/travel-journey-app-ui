@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_journey_app/constants/string_const.dart';
+import 'package:travel_journey_app/core/app_colors.dart';
 import 'package:travel_journey_app/routing/router.dart';
 
 void main() {
@@ -9,13 +10,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: StringConst.appTitle,
       theme: ThemeData(
-        brightness: .dark
+        brightness: .dark,
+        fontFamily: StringConst.appFontFamily,
+        scaffoldBackgroundColor: AppColors.background,
       ),
       routerConfig: router,
       builder: (ctx, child) => child!,
