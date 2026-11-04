@@ -27,4 +27,10 @@ class StringConst {
   static const locationLabel = 'Location';
   static const openLabel = 'Open';
   static const weatherLabel = 'Weather';
+
+  static const calendarTitle = 'Calendar';
+  static const micTitle = 'Voice Search';
+  static const wishlistTitle = 'Wishlist';
+  static const settingsTitle = 'Settings';
+  static const stubComingSoon = 'Coming soon';
 }

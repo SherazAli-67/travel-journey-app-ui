@@ -30,4 +30,8 @@ class NumberConstant {
   static const detailHeroHeightFraction = 0.52;
   static const welcomeCtaBottomFraction = 0.12;
   static const welcomeCtaButtonOverlap = 50.0;
+  static const homeHeaderSpacing = 16.0;
+  static const homeContentSpacing = 20.0;
+  static const carouselItemPadding = 8.0;
+  static const avatarPadding = 2.0;
 }
