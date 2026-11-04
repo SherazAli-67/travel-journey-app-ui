@@ -38,8 +38,10 @@ class SearchBarRow extends StatelessWidget {
               child: Row(
                 spacing: NumberConstant.chipGap,
                 children: [
-                  SvgPicture.asset(AssetRes.icSearch, colorFilter: .mode(AppColors.white64, .srcIn),),
-                  Text(hint, style: AppTextStyles.searchPlaceholder,),
+                  //icSearch
+                  SvgPicture.asset(AssetRes.icSearch),
+                  Text(hint, style: AppTextStyles.searchPlaceholder,)
+                  //hint, searchPlaceHolder
                 ],
               ),
             ),
@@ -54,7 +56,8 @@ class SearchBarRow extends StatelessWidget {
               border: .all(color: AppColors.borderWhite8, width: 1.5),
             ),
             padding: .all(NumberConstant.filterButtonPadding),
-            child: SvgPicture.asset(AssetRes.icFilter, colorFilter: .mode(AppColors.onPrimary, .srcIn),),
+            //icFilter
+            child: SvgPicture.asset(AssetRes.icFilter)
           ),
         ),
       ],

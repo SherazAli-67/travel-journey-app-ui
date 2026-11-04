@@ -48,17 +48,11 @@ class CategoryChipRow extends StatelessWidget {
                 spacing: NumberConstant.chipGap,
                 children: [
                   if (iconAsset != null)
-                    SvgPicture.asset(
-                      iconAsset,
-                      colorFilter: .mode(isSelected ? AppColors.onPrimary : AppColors.white, .srcIn),
-                    ),
+                    //iconAsset, isSelected: onPrimary :  white
+                    SvgPicture.asset(iconAsset, colorFilter: ColorFilter.mode(isSelected ? AppColors.onPrimary : Colors.white, .srcIn),),
                   Flexible(
-                    child: Text(
-                      label,
-                      style: isSelected ? activeStyle : inactiveStyle,
-                      overflow: .ellipsis,
-                      maxLines: 1,
-                    ),
+                    //label, isSelected ? activeStyle : inactiveStyle,
+                    child: Text(label, style: isSelected ? activeStyle : inactiveStyle,)
                   ),
                 ],
               ),

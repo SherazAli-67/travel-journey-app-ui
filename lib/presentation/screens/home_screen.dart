@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
@@ -35,8 +36,10 @@ class _HomeView extends StatelessWidget {
       fit: .expand,
       children: [
         Positioned.fill(
-          child: Image.asset(AssetRes.bgOverlay, fit: .cover,),
+          //bgOverlay, fit.cover
+          child: Image.asset(AssetRes.bgOverlay, fit: .cover,)
         ),
+        
         SafeArea(
           child: Padding(
             padding: .fromLTRB(
@@ -50,6 +53,7 @@ class _HomeView extends StatelessWidget {
               spacing: NumberConstant.homeContentSpacing,
               children: [
                 _buildHeader(),
+                //homeTitle, homeTitle
                 Text(StringConst.homeTitle, style: AppTextStyles.homeTitle,),
                 SearchBarRow(onTap: () => context.push(NamedRoutes.search.routeName),),
                 Consumer<HomeProvider>(
@@ -75,9 +79,12 @@ class _HomeView extends StatelessWidget {
           child: Text.rich(
             TextSpan(
               children: [
+                //greetingHello, greetingLight
                 TextSpan(text: StringConst.greetingHello, style: AppTextStyles.greetingLight),
                 const TextSpan(text: ' '),
+                //userName, greetingBold,
                 TextSpan(text: StringConst.userName, style: AppTextStyles.greetingBold),
+                //greetingWave, greetingBold
                 TextSpan(text: StringConst.greetingWave, style: AppTextStyles.greetingBold),
               ],
             ),
@@ -86,11 +93,7 @@ class _HomeView extends StatelessWidget {
         Row(
           spacing: NumberConstant.chipGap + 4,
           children: [
-            CircleIconButton(
-              iconAsset: AssetRes.icNotification,
-              backgroundColor: AppColors.black05,
-              showBadge: true,
-            ),
+            //icNotification
             Container(
               decoration: BoxDecoration(
                 shape: .circle,
@@ -98,12 +101,7 @@ class _HomeView extends StatelessWidget {
               ),
               padding: .all(NumberConstant.avatarPadding),
               child: ClipOval(
-                child: Image.asset(
-                  AppData.userAvatar,
-                  fit: .cover,
-                  width: 44,
-                  height: 44,
-                ),
+                child: Image.asset(AppData.userAvatar, height: 44,)
               ),
             ),
           ],

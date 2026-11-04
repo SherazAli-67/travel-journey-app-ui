@@ -8,7 +8,7 @@ class StringConst {
       'Discover beautiful places, book flights and\nhotels with ease — all in one app.';
 
   static const greetingHello = 'Hello,';
-  static const userName = 'Julia Nova';
+  static const userName = 'Sheraz Ali';
   static const greetingWave = ' 👋';
   static const homeTitle = 'Where do you want to go?';
   static const searchHint = 'Search';
