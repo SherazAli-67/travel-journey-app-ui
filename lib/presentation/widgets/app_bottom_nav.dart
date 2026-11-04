@@ -33,12 +33,9 @@ class AppBottomNav extends StatelessWidget {
         color: AppColors.black05,
         borderRadius: .circular(NumberConstant.pillRadius),
       ),
-      // padding: .symmetric(horizontal: NumberConstant.bottomNavBarPaddingH),
       child: ClipRRect(
-
         borderRadius: .circular(NumberConstant.bottomNavRadius),
         child: BackdropFilter(
-
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: Container(
             decoration: BoxDecoration(
