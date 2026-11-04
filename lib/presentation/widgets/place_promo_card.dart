@@ -130,7 +130,13 @@ class _PlacePromoCardState extends State<PlacePromoCard>
             child: Stack(
               fit: .expand,
               children: [
-                _buildParallaxImage(constraints),
+                Hero(
+                  tag: 'place-${widget.place.id}',
+                  child: Material(
+                    type: .transparency,
+                    child: _buildParallaxImage(constraints),
+                  ),
+                ),
                 _buildDoubleTapBurst(),
                 _buildInfoOverlay(),
               ],

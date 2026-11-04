@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_journey_app/constants/motion_constant.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
 import 'package:travel_journey_app/constants/string_const.dart';
 import 'package:travel_journey_app/core/app_colors.dart';
@@ -14,6 +15,7 @@ import 'package:travel_journey_app/core/models/place_model.dart';
 import 'package:travel_journey_app/presentation/providers/place_detail_provider.dart';
 import 'package:travel_journey_app/presentation/widgets/category_chip_row.dart';
 import 'package:travel_journey_app/presentation/widgets/circle_icon_button.dart';
+import 'package:travel_journey_app/presentation/widgets/fade_slide_in.dart';
 
 class PlaceDetailScreen extends StatelessWidget {
   final String placeId;
@@ -34,6 +36,8 @@ class _PlaceDetailView extends StatelessWidget {
 
   const _PlaceDetailView({required this.place});
 
+  static String heroTag(String placeId) => 'place-$placeId';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +45,12 @@ class _PlaceDetailView extends StatelessWidget {
         fit: .expand,
         children: [
           Positioned.fill(
-            child: Image.asset(AssetRes.bgOverlay, fit: .cover,),
+            child: Image.asset(AssetRes.bgOverlay, fit: .cover),
           ),
           LayoutBuilder(
             builder: (context, constraints) {
-              final heroHeight = constraints.maxHeight * NumberConstant.detailHeroHeightFraction;
+              final heroHeight =
+                  constraints.maxHeight * NumberConstant.detailHeroHeightFraction;
               return Column(
                 children: [
                   SizedBox(
@@ -65,16 +70,22 @@ class _PlaceDetailView extends StatelessWidget {
                         crossAxisAlignment: .start,
                         spacing: NumberConstant.homeContentSpacing,
                         children: [
-                          _buildTitleRow(),
+                          FadeSlideIn(child: _buildTitleRow()),
                           _buildInfoTiles(),
-                          Consumer<PlaceDetailProvider>(
-                            builder: (context, provider, _) => CategoryChipRow(
-                              tabs: AppData.detailTabs,
-                              selectedIndex: provider.selectedTabIndex,
-                              onSelected: provider.selectTab,
+                          FadeSlideIn(
+                            delay: MotionConstant.staggerStep * 4,
+                            child: Consumer<PlaceDetailProvider>(
+                              builder: (context, provider, _) => CategoryChipRow(
+                                tabs: AppData.detailTabs,
+                                selectedIndex: provider.selectedTabIndex,
+                                onSelected: provider.selectTab,
+                              ),
                             ),
                           ),
-                          _buildTabContent(context),
+                          FadeSlideIn(
+                            delay: MotionConstant.staggerStep * 5,
+                            child: _buildTabContent(context),
+                          ),
                         ],
                       ),
                     ),
@@ -95,12 +106,24 @@ class _PlaceDetailView extends StatelessWidget {
       fit: .expand,
       children: [
         ClipRRect(
-          borderRadius: .vertical(bottom: Radius.circular(NumberConstant.heroBottomRadius)),
+          borderRadius: .vertical(
+            bottom: Radius.circular(NumberConstant.heroBottomRadius),
+          ),
           child: PageView.builder(
             controller: provider.pageController,
             itemCount: gallery.length,
             onPageChanged: provider.setGalleryIndex,
-            itemBuilder: (context, index) => Image.asset(gallery[index], fit: .cover,),
+            itemBuilder: (context, index) {
+              final image = Image.asset(gallery[index], fit: .cover);
+              if (index != 0) return image;
+              return Hero(
+                tag: heroTag(place.id),
+                child: Material(
+                  type: .transparency,
+                  child: image,
+                ),
+              );
+            },
           ),
         ),
         SafeArea(
@@ -116,9 +139,8 @@ class _PlaceDetailView extends StatelessWidget {
                   iconAsset: AssetRes.icArrowBack,
                   onTap: () => context.pop(),
                 ),
-                CircleIconButton(
-                  iconAsset: provider.isFavorite ? AssetRes.icFavoriteFilled : AssetRes.icFavoriteOutlined,
-                  iconColor: AppColors.primary,
+                _FavoriteIconButton(
+                  isFavorite: provider.isFavorite,
                   onTap: provider.toggleFavorite,
                 ),
               ],
@@ -135,7 +157,8 @@ class _PlaceDetailView extends StatelessWidget {
             children: List.generate(gallery.length, (index) {
               final isActive = provider.galleryIndex == index;
               return AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: MotionConstant.normal,
+                curve: MotionConstant.selectCurve,
                 decoration: BoxDecoration(
                   color: isActive ? AppColors.primary : AppColors.glassWhite30,
                   borderRadius: .circular(NumberConstant.pillRadius),
@@ -156,13 +179,19 @@ class _PlaceDetailView extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(place.name, style: AppTextStyles.detailTitle,),
+          child: Text(place.name, style: AppTextStyles.detailTitle),
         ),
         Row(
           spacing: 4,
           children: [
-            SvgPicture.asset(AssetRes.icRatingStar, colorFilter: .mode(AppColors.primary, .srcIn),),
-            Text(place.rating.toStringAsFixed(1), style: AppTextStyles.placeRating,),
+            SvgPicture.asset(
+              AssetRes.icRatingStar,
+              colorFilter: .mode(AppColors.primary, .srcIn),
+            ),
+            Text(
+              place.rating.toStringAsFixed(1),
+              style: AppTextStyles.placeRating,
+            ),
           ],
         ),
       ],
@@ -177,9 +206,11 @@ class _PlaceDetailView extends StatelessWidget {
     ];
     return Row(
       spacing: NumberConstant.chipGap,
-      children: items
-          .map(
-            (item) => Expanded(
+      children: [
+        for (var i = 0; i < items.length; i++)
+          Expanded(
+            child: FadeSlideIn(
+              delay: MotionConstant.staggerStep * (i + 1),
               child: ClipRRect(
                 borderRadius: .circular(NumberConstant.infoTileRadius),
                 child: BackdropFilter(
@@ -198,31 +229,117 @@ class _PlaceDetailView extends StatelessWidget {
                       crossAxisAlignment: .start,
                       spacing: 10,
                       children: [
-                        Text(item.$1, style: AppTextStyles.infoLabel,),
-                        Text(item.$2, style: AppTextStyles.infoValue,),
+                        Text(items[i].$1, style: AppTextStyles.infoLabel),
+                        Text(items[i].$2, style: AppTextStyles.infoValue),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-          )
-          .toList(),
+          ),
+      ],
     );
   }
 
   Widget _buildTabContent(BuildContext context) {
     final tabIndex = context.watch<PlaceDetailProvider>().selectedTabIndex;
-    if (tabIndex != 0) {
-      return Text(StringConst.stubComingSoon, style: AppTextStyles.bodyMedium,);
+    return AnimatedSwitcher(
+      duration: MotionConstant.normal,
+      switchInCurve: MotionConstant.enterCurve,
+      switchOutCurve: MotionConstant.selectCurve,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.04),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: KeyedSubtree(
+        key: ValueKey(tabIndex),
+        child: tabIndex != 0
+            ? Text(
+                StringConst.stubComingSoon,
+                style: AppTextStyles.bodyMedium,
+              )
+            : Column(
+                crossAxisAlignment: .start,
+                spacing: NumberConstant.chipGap,
+                children: [
+                  Text(StringConst.overview, style: AppTextStyles.sectionTitle),
+                  Text(place.overview, style: AppTextStyles.bodyMedium),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+class _FavoriteIconButton extends StatefulWidget {
+  final bool isFavorite;
+  final VoidCallback onTap;
+
+  const _FavoriteIconButton({
+    required this.isFavorite,
+    required this.onTap,
+  });
+
+  @override
+  State<_FavoriteIconButton> createState() => _FavoriteIconButtonState();
+}
+
+class _FavoriteIconButtonState extends State<_FavoriteIconButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: MotionConstant.favoriteBounce,
+    );
+    _scale = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1, end: 1.35), weight: 35),
+      TweenSequenceItem(tween: Tween(begin: 1.35, end: 0.85), weight: 25),
+      TweenSequenceItem(tween: Tween(begin: 0.85, end: 1.15), weight: 20),
+      TweenSequenceItem(tween: Tween(begin: 1.15, end: 1), weight: 20),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void didUpdateWidget(covariant _FavoriteIconButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFavorite != widget.isFavorite) {
+      if (!MediaQuery.disableAnimationsOf(context)) {
+        _controller.forward(from: 0);
+      }
     }
-    return Column(
-      crossAxisAlignment: .start,
-      spacing: NumberConstant.chipGap,
-      children: [
-        Text(StringConst.overview, style: AppTextStyles.sectionTitle,),
-        Text(place.overview, style: AppTextStyles.bodyMedium,),
-      ],
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scale,
+      child: CircleIconButton(
+        iconAsset: widget.isFavorite
+            ? AssetRes.icFavoriteFilled
+            : AssetRes.icFavoriteOutlined,
+        iconColor: AppColors.primary,
+        onTap: widget.onTap,
+      ),
     );
   }
 }
