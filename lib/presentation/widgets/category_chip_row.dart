@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_journey_app/constants/motion_constant.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
 import 'package:travel_journey_app/core/app_colors.dart';
 import 'package:travel_journey_app/core/app_textstyles.dart';
@@ -34,10 +35,14 @@ class CategoryChipRow extends StatelessWidget {
         return Expanded(
           child: GestureDetector(
             onTap: () => onSelected(index),
-            child: Container(
+            child: AnimatedContainer(
+              duration: MotionConstant.normal,
+              curve: MotionConstant.selectCurve,
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : AppColors.chipInactive,
-                borderRadius: .circular(isSelected ? NumberConstant.pillRadius : NumberConstant.cardRadius),
+                borderRadius: .circular(
+                  isSelected ? NumberConstant.pillRadius : NumberConstant.cardRadius,
+                ),
               ),
               padding: .symmetric(
                 horizontal: NumberConstant.chipPaddingH,
@@ -48,11 +53,18 @@ class CategoryChipRow extends StatelessWidget {
                 spacing: NumberConstant.chipGap,
                 children: [
                   if (iconAsset != null)
-                    //iconAsset, isSelected: onPrimary :  white
-                    SvgPicture.asset(iconAsset, colorFilter: ColorFilter.mode(isSelected ? AppColors.onPrimary : Colors.white, .srcIn),),
+                    SvgPicture.asset(
+                      iconAsset,
+                      colorFilter: ColorFilter.mode(
+                        isSelected ? AppColors.onPrimary : Colors.white,
+                        .srcIn,
+                      ),
+                    ),
                   Flexible(
-                    //label, isSelected ? activeStyle : inactiveStyle,
-                    child: Text(label, style: isSelected ? activeStyle : inactiveStyle,)
+                    child: Text(
+                      label,
+                      style: isSelected ? activeStyle : inactiveStyle,
+                    ),
                   ),
                 ],
               ),

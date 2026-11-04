@@ -12,4 +12,9 @@ class MotionConstant {
 
   static const double tapScale = 0.96;
   static const double slideDistance = 24.0;
+
+  static const double carouselNeighborScale = 0.92;
+  static const double carouselNeighborOpacity = 0.75;
+  static const double carouselParallaxFactor = 32.0;
+  static const double carouselImageOverflowScale = 1.18;
 }

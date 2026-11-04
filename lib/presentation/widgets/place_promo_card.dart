@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_journey_app/constants/motion_constant.dart';
 import 'package:travel_journey_app/constants/number_constant.dart';
 import 'package:travel_journey_app/core/app_colors.dart';
 import 'package:travel_journey_app/core/app_textstyles.dart';
 import 'package:travel_journey_app/core/asset_res.dart';
 import 'package:travel_journey_app/core/models/place_model.dart';
+import 'package:travel_journey_app/presentation/widgets/scale_on_tap.dart';
 
 class PlacePromoCard extends StatelessWidget {
   final PlaceModel place;
@@ -14,6 +16,8 @@ class PlacePromoCard extends StatelessWidget {
   final VoidCallback? onFavoriteTap;
   final bool isFavorite;
   final double? aspectRatio;
+  final double parallaxOffset;
+  final bool enableParallax;
 
   const PlacePromoCard({
     super.key,
@@ -22,25 +26,22 @@ class PlacePromoCard extends StatelessWidget {
     this.onFavoriteTap,
     this.isFavorite = false,
     this.aspectRatio,
+    this.parallaxOffset = 0,
+    this.enableParallax = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final card = GestureDetector(
+        final card = ScaleOnTap(
           onTap: onTap,
           child: ClipRRect(
             borderRadius: .circular(NumberConstant.cardRadius),
             child: Stack(
               fit: .expand,
               children: [
-                Image.asset(
-                  place.imageAsset,
-                  fit: .cover,
-                  width: constraints.maxWidth.isFinite ? constraints.maxWidth : null,
-                  height: constraints.maxHeight.isFinite ? constraints.maxHeight : null,
-                ),
+                _buildParallaxImage(constraints),
                 Positioned(
                   left: NumberConstant.promoPaddingH,
                   right: NumberConstant.promoPaddingH,
@@ -65,8 +66,11 @@ class PlacePromoCard extends StatelessWidget {
                                 crossAxisAlignment: .start,
                                 spacing: 2,
                                 children: [
-                                  //place.name, placeName, maxLines:1,
-                                  Text(place.name, style: AppTextStyles.placeName, maxLines: 1,),
+                                  Text(
+                                    place.name,
+                                    style: AppTextStyles.placeName,
+                                    maxLines: 1,
+                                  ),
                                   Row(
                                     spacing: NumberConstant.promoMetaGap,
                                     children: [
@@ -74,10 +78,12 @@ class PlacePromoCard extends StatelessWidget {
                                         child: Row(
                                           spacing: NumberConstant.promoInnerGap,
                                           children: [
-                                            //place.formattedPrice, placePrice
-                                            Text(place.formattedPrice, style: AppTextStyles.placePrice,),
+                                            Text(
+                                              place.formattedPrice,
+                                              style: AppTextStyles.placePrice,
+                                            ),
                                             Container(
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 color: AppColors.white,
                                                 shape: .circle,
                                               ),
@@ -87,12 +93,18 @@ class PlacePromoCard extends StatelessWidget {
                                               child: Row(
                                                 spacing: 4,
                                                 children: [
-                                                  //icLocationMarker, primaryColor
-                                                  SvgPicture.asset(AssetRes.icLocationMarker, colorFilter: .mode(AppColors.primary, .srcIn),),
-
-                                                  //place.location, placeLocation, maxLines:1
+                                                  SvgPicture.asset(
+                                                    AssetRes.icLocationMarker,
+                                                    colorFilter: .mode(
+                                                      AppColors.primary,
+                                                      .srcIn,
+                                                    ),
+                                                  ),
                                                   Flexible(
-                                                    child:  Text(place.location, style: AppTextStyles.placeLocation,),
+                                                    child: Text(
+                                                      place.location,
+                                                      style: AppTextStyles.placeLocation,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -100,13 +112,6 @@ class PlacePromoCard extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                     /* Row(
-                                        spacing: 4,
-                                        children: [
-                                          SvgPicture.asset(AssetRes.icRatingStar, colorFilter: .mode(AppColors.primary, .srcIn),),
-                                          Text(place.rating.toStringAsFixed(1), style: AppTextStyles.placeRating,)
-                                        ],
-                                      ),*/
                                     ],
                                   ),
                                 ],
@@ -115,14 +120,31 @@ class PlacePromoCard extends StatelessWidget {
                             GestureDetector(
                               onTap: onFavoriteTap,
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: AppColors.black10,
                                   shape: .circle,
                                 ),
                                 padding: .all(NumberConstant.heartButtonPadding),
-                                child: SvgPicture.asset(
-                                  isFavorite ? AssetRes.icFavoriteFilled : AssetRes.icFavoriteOutlined,
-                                  colorFilter: .mode(isFavorite ? AppColors.primary : AppColors.white, .srcIn),
+                                child: TweenAnimationBuilder<double>(
+                                  key: ValueKey(isFavorite),
+                                  tween: Tween(begin: 0.75, end: 1),
+                                  duration: MotionConstant.fast,
+                                  curve: Curves.easeOutBack,
+                                  builder: (context, scale, child) {
+                                    return Transform.scale(
+                                      scale: scale,
+                                      child: child,
+                                    );
+                                  },
+                                  child: SvgPicture.asset(
+                                    isFavorite
+                                        ? AssetRes.icFavoriteFilled
+                                        : AssetRes.icFavoriteOutlined,
+                                    colorFilter: .mode(
+                                      isFavorite ? AppColors.primary : AppColors.white,
+                                      .srcIn,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -153,6 +175,36 @@ class PlacePromoCard extends StatelessWidget {
 
         return card;
       },
+    );
+  }
+
+  Widget _buildParallaxImage(BoxConstraints constraints) {
+    final hasSize =
+        constraints.maxWidth.isFinite && constraints.maxHeight.isFinite;
+    final image = Image.asset(
+      place.imageAsset,
+      fit: .cover,
+      width: hasSize ? constraints.maxWidth : null,
+      height: hasSize ? constraints.maxHeight : null,
+      alignment: enableParallax
+          ? Alignment(
+              (parallaxOffset / MotionConstant.carouselParallaxFactor)
+                  .clamp(-1.0, 1.0),
+              0,
+            )
+          : .center,
+    );
+
+    if (!enableParallax) return image;
+
+    return ClipRect(
+      child: Transform.translate(
+        offset: Offset(parallaxOffset, 0),
+        child: Transform.scale(
+          scale: MotionConstant.carouselImageOverflowScale,
+          child: image,
+        ),
+      ),
     );
   }
 }
