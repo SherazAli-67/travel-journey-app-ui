@@ -29,4 +29,5 @@ class NumberConstant {
   static const carouselViewportFraction = 0.83;
   static const detailHeroHeightFraction = 0.52;
   static const welcomeCtaBottomFraction = 0.12;
+  static const welcomeCtaButtonOverlap = 50.0;
 }
